@@ -1,0 +1,62 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: h_postgres
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=chess-ts-db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    volumes:
+      - ./db/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: h_server
+    healthcheck:
+      test: "curl -f http://localhost:8080/ping || exit 1"
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 1m
+    volumes:
+      - ./server:/app
+      - .env:/app/.env
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  chess-ts-client:
+    build:
+      context: ./chess-ts-client
+      dockerfile: Dockerfile
+    container_name: h_chess_ts_client
+    env_file:
+      - .env
+    volumes:
+      - ./chess-ts-client:/app
+      - /app/node_modules
+    healthcheck:
+      test: "curl -f http://localhost:5173 || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 3m
+    ports:
+      - "5173:5173"
+    depends_on:
+      server:
+        condition: service_healthy

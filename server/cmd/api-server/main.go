@@ -9,7 +9,9 @@ import (
 	"github.com/joho/godotenv"
 
 	"github.com/jsbento/chess-server-v4/pkg/api"
-	"github.com/jsbento/chess-server-v4/pkg/db"
+
+	uS "github.com/jsbento/chess-server-v4/cmd/services/users/service"
+	uT "github.com/jsbento/chess-server-v4/cmd/services/users/types"
 )
 
 func main() {
@@ -31,11 +33,13 @@ func main() {
 	}
 
 	pgDSN := os.Getenv("POSTGRES_DSN")
-	pg, err := db.NewPostgres(pgDSN)
+	usersService, err := uS.NewUsersService(&uT.Config{
+		PostgresDSN: pgDSN,
+	})
 	if err != nil {
-		log.Fatalf("Failed to create postgres: %v", err)
+		log.Fatalf("Failed to create users service: %v", err)
 	}
-	defer pg.Close()
+	defer usersService.Close()
 
 	cfg := &api.ServerConfig{
 		Port: serverPort,
@@ -49,6 +53,7 @@ func main() {
 		log.Printf("Ping received")
 		api.WriteJSON(w, http.StatusOK, map[string]string{"message": "pong"})
 	})
+	usersService.BindRoutes(server.Router)
 
 	log.Printf("Server starting on port %d", serverPort)
 	if err := server.Start(); err != nil {

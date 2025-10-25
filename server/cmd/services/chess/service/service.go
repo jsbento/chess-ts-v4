@@ -6,18 +6,18 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	b "github.com/jsbento/chess-server-v4/cmd/services/users/behavior"
-	t "github.com/jsbento/chess-server-v4/cmd/services/users/types"
+	b "github.com/jsbento/chess-server-v4/cmd/services/chess/behavior"
+	t "github.com/jsbento/chess-server-v4/cmd/services/chess/types"
 
 	"github.com/jsbento/chess-server-v4/pkg/auth"
 )
 
-type UsersService struct {
+type ChessService struct {
 	store *b.Store
 	jwt   *auth.JWTService
 }
 
-func NewUsersService(config *t.Config) (*UsersService, error) {
+func NewChessService(config *t.Config) (*ChessService, error) {
 	if err := config.Validate(); err != nil {
 		return nil, err
 	}
@@ -44,20 +44,20 @@ func NewUsersService(config *t.Config) (*UsersService, error) {
 		return nil, err
 	}
 
-	return &UsersService{
+	return &ChessService{
 		store: store,
 		jwt:   jwtService,
 	}, nil
 }
 
-func (s *UsersService) Close() error {
+func (s *ChessService) Close() error {
 	return s.store.Close()
 }
 
-func (s *UsersService) BindRoutes(router *chi.Mux) {
-	router.Route("/users", func(r chi.Router) {
-		r.Post("/signup", s.CreateUser())
-		r.Put("/{id}", s.jwt.Authed(s.UpdateUser()))
-		r.Get("/{id}", s.jwt.Authed(s.GetUser()))
+func (s *ChessService) BindRoutes(router *chi.Mux) {
+	router.Route("/chess", func(r chi.Router) {
+		// TODO: auth
+		r.Post("/eval", s.EvalPosition())
+		r.Post("/search", s.SearchPosition())
 	})
 }

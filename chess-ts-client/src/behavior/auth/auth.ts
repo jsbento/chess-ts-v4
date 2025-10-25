@@ -1,7 +1,7 @@
 import { post, get } from '@utils'
-import { AppDispatch } from 'state/store'
+import type { AppDispatch } from 'state/store'
 import { login, logout } from '@reducers'
-import { User, SignInReq, SignUpReq, AuthResp } from '@types'
+import type { User, SignInReq, SignUpReq, AuthResp } from '@types'
 
 export const signOut = (dispatch: AppDispatch) => {
   window.localStorage.removeItem('token')
@@ -52,12 +52,12 @@ export const signUp = async (
 
 export const checkHealthz = async (): Promise<boolean> => {
   try {
-    const resp = await get<null, string>('/healthz', null)
+    const resp = await get<null, { message: string }>('/ping', null)
     if (!resp) {
       return false
     }
 
-    return resp === 'ok'
+    return resp.message === 'pong'
   } catch (err) {
     console.log(err)
     return false

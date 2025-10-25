@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import type { RefObject } from 'react'
 
-export const useDimensions = (ref: RefObject<HTMLDivElement>) => {
+export const useDimensions = (ref: RefObject<HTMLDivElement | null>) => {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
 
   useEffect(() => {

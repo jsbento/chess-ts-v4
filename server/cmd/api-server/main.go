@@ -8,10 +8,14 @@ import (
 
 	"github.com/joho/godotenv"
 
-	"github.com/jsbento/chess-server-v4/pkg/api"
-
+	cS "github.com/jsbento/chess-server-v4/cmd/services/chess/service"
+	cT "github.com/jsbento/chess-server-v4/cmd/services/chess/types"
 	uS "github.com/jsbento/chess-server-v4/cmd/services/users/service"
 	uT "github.com/jsbento/chess-server-v4/cmd/services/users/types"
+
+	eInit "github.com/jsbento/chess-server-v4/internal/engine/init"
+
+	"github.com/jsbento/chess-server-v4/pkg/api"
 )
 
 func main() {
@@ -33,15 +37,29 @@ func main() {
 	}
 
 	pgDSN := os.Getenv("POSTGRES_DSN")
+	jKeyPath := os.Getenv("JWT_KEY_PATH")
+	jSecretPath := os.Getenv("JWT_SECRET_PATH")
 	usersService, err := uS.NewUsersService(&uT.Config{
 		PostgresDSN:   pgDSN,
-		JWTKeyPath:    os.Getenv("JWT_KEY_PATH"),
-		JWTSecretPath: os.Getenv("JWT_SECRET_PATH"),
+		JWTKeyPath:    jKeyPath,
+		JWTSecretPath: jSecretPath,
 	})
 	if err != nil {
 		log.Fatalf("Failed to create users service: %v", err)
 	}
 	defer usersService.Close()
+
+	chessService, err := cS.NewChessService(&cT.Config{
+		PostgresDSN:   pgDSN,
+		JWTKeyPath:    jKeyPath,
+		JWTSecretPath: jSecretPath,
+	})
+	if err != nil {
+		log.Fatalf("Failed to create chess service: %v", err)
+	}
+	defer chessService.Close()
+
+	eInit.AllInit()
 
 	cfg := &api.ServerConfig{
 		Port: serverPort,
@@ -55,6 +73,7 @@ func main() {
 		log.Printf("Ping received")
 		api.WriteJSON(w, http.StatusOK, map[string]string{"message": "pong"})
 	})
+	chessService.BindRoutes(server.Router)
 	usersService.BindRoutes(server.Router)
 
 	log.Printf("Server starting on port %d", serverPort)

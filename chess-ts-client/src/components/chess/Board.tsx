@@ -4,11 +4,11 @@ import React, {
   useCallback,
   useMemo,
   useRef,
-  MouseEvent,
+  type MouseEvent,
 } from 'react'
 import {
   DndContext,
-  DragEndEvent,
+  type DragEndEvent,
   PointerSensor,
   useSensor,
   useSensors,
@@ -34,7 +34,7 @@ import GameStatusModal from './GameStatusModal'
 import { useDimensions, useAppDispatch, useAppSelector } from '@hooks'
 import { evaluatePosition, searchPosition } from '@behavior'
 import { openGameStatusModal, addMove, clearMoves } from '@reducers'
-import { PromotionPiece, Move, SelectedPiece } from '@types'
+import type { PromotionPiece, Move, SelectedPiece } from '@types'
 
 const DefaultFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 const chess = new Chess(DefaultFEN)

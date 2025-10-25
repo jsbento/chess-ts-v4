@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react'
+import React, { type MouseEvent } from 'react'
 import { useDraggable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
 

@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js'
-import { Move, PromotionPiece } from '@types'
+import type { Move, PromotionPiece } from '@types'
 export const getCharBoard = (chess: Chess): string[] => {
   const charBoard: string[] = []
 

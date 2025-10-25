@@ -1,6 +1,6 @@
 import { post } from '@utils'
 
-import {
+import type {
   EvaluationReq,
   EvaluationResp,
   SearchPositionReq,

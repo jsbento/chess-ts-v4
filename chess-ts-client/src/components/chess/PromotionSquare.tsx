@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { getPieceImage } from '@utils'
-import { PromotionPiece } from '@types'
+import type { PromotionPiece } from '@types'
 
 const PromotionPieces: PromotionPiece[] = ['q', 'r', 'b', 'n']
 

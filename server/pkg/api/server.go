@@ -72,11 +72,9 @@ func WriteJSON(w http.ResponseWriter, code int, payload interface{}) {
 	w.Write(b)
 }
 
-var decoder = schema.NewDecoder()
-
-func Parse(r *http.Request, out interface{}) {
+func Parse(r *http.Request, out any) {
 	if r.Method == "GET" {
-		if err := decoder.Decode(out, r.URL.Query()); err != nil {
+		if err := schema.NewDecoder().Decode(out, r.URL.Query()); err != nil {
 			Abort(http.StatusUnprocessableEntity, err)
 		}
 	} else {

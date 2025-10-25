@@ -4,19 +4,28 @@ import (
 	"errors"
 	"regexp"
 	"time"
-
-	sT "github.com/jsbento/chess-server-v4/cmd/services/sessions/types"
 )
 
 type User struct {
-	Id        string    `json:"id" gorm:"primaryKey;index"`
-	Username  string    `json:"username" gorm:"not null"`
-	Email     string    `json:"email" gorm:"not null;unique"`
-	Password  string    `json:"password" gorm:"not null"`
+	Id        string    `json:"id"        gorm:"primaryKey;index"`
+	Username  string    `json:"username"  gorm:"not null"`
+	Email     string    `json:"email"     gorm:"not null;unique"`
+	Password  string    `json:"password"  gorm:"not null"`
 	CreatedAt time.Time `json:"createdAt" gorm:"autoCreateTime"`
 	UpdatedAt time.Time `json:"updatedAt" gorm:"autoUpdateTime"`
 
-	Sessions []*sT.Session `json:"sessions,omitempty" gorm:"foreignKey:UserId;references:Id"`
+	AccessToken  string `json:"accessToken"  gorm:"-"`
+	RefreshToken string `json:"refreshToken" gorm:"-"`
+}
+
+func (u *User) GetId() string {
+	return u.Id
+}
+func (u *User) GetEmail() string {
+	return u.Email
+}
+func (u *User) GetCreatedAt() time.Time {
+	return u.CreatedAt
 }
 
 type CreateUser struct {

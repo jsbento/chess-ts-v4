@@ -32,7 +32,7 @@ services:
       start_period: 1m
     volumes:
       - ./server:/app
-      - .env:/app/.env
+      - .env.server:/app/.env
     ports:
       - "8080:8080"
     depends_on:
@@ -44,11 +44,10 @@ services:
       context: ./chess-ts-client
       dockerfile: Dockerfile
     container_name: h_chess_ts_client
-    env_file:
-      - .env
     volumes:
       - ./chess-ts-client:/app
       - /app/node_modules
+      - .env.client:/app/.env
     healthcheck:
       test: "curl -f http://localhost:5173 || exit 1"
       interval: 10s

@@ -34,7 +34,9 @@ func main() {
 
 	pgDSN := os.Getenv("POSTGRES_DSN")
 	usersService, err := uS.NewUsersService(&uT.Config{
-		PostgresDSN: pgDSN,
+		PostgresDSN:   pgDSN,
+		JWTKeyPath:    os.Getenv("JWT_KEY_PATH"),
+		JWTSecretPath: os.Getenv("JWT_SECRET_PATH"),
 	})
 	if err != nil {
 		log.Fatalf("Failed to create users service: %v", err)

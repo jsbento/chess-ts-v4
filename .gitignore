@@ -1,3 +1,5 @@
 .env
+.env.server
+.env.client
 
 db/**

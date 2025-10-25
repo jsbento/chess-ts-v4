@@ -1,0 +1,7 @@
+node_modules/
+dist/
+env.d.ts
+src/vite-env.d.ts
+package.json
+package-lock.json
+README.md

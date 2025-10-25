@@ -1,0 +1,6 @@
+export { default as Root } from './root/Root'
+export { default as Home } from './Home'
+export { default as Chess } from './Chess'
+export { default as Error } from './Error'
+export { default as Auth } from './Auth'
+export { default as Profile } from './Profile'

@@ -45,7 +45,7 @@ services:
       dockerfile: Dockerfile
     container_name: h_chess_ts_client
     volumes:
-      - ./chess-ts-client:/app
+      - ./chess-ts-client/src:/app/src
       - /app/node_modules
       - .env.client:/app/.env
     healthcheck:

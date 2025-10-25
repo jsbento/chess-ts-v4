@@ -22,7 +22,28 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    /* Import Aliases */
+    "baseUrl": "./src",
+    "paths": {
+      "@behavior": ["behavior"],
+      "@behavior/*": ["behavior/*"],
+      "@components": ["components"],
+      "@components/*": ["components/*"],
+      "@pages": ["pages"],
+      "@pages/*": ["pages/*"],
+      "@hooks": ["hooks"],
+      "@hooks/*": ["hooks/*"],
+      "@state": ["state"],
+      "@state/*": ["state/*"],
+      "@reducers": ["state/reducers"],
+      "@reducers/*": ["state/reducers/*"],
+      "@utils": ["utils"],
+      "@utils/*": ["utils/*"],
+      "@types": ["types"],
+      "@types/*": ["types/*"]
+    }
   },
   "include": ["src"]
 }

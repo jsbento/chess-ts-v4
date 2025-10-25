@@ -7,13 +7,23 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prettier-all": "prettier . --write"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@reduxjs/toolkit": "^2.9.2",
     "@tailwindcss/vite": "^4.1.14",
+    "axios": "^1.12.2",
+    "chess.js": "^1.4.0",
+    "formik": "^2.4.6",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "tailwindcss": "^4.1.14"
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.9.4",
+    "redux-persist": "^6.0.0",
+    "tailwindcss": "^4.1.14",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
@@ -25,8 +35,10 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
+    "prettier": "3.6.2",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.45.0",
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "vite-tsconfig-paths": "^5.1.4"
   }
 }

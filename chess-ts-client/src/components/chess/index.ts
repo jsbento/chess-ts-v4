@@ -1,3 +1,7 @@
 export { default as Board } from './Board'
 export { default as History } from './History'
 export { default as EngineControl } from './EngineControl'
+export { default as BoardCell } from './BoardCell'
+export { default as Piece } from './Piece'
+export { default as PromotionSquare } from './PromotionSquare'
+export { default as GameStatusModal } from './GameStatusModal'

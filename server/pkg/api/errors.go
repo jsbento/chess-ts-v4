@@ -46,7 +46,7 @@ func CheckError(statusCode int, err error, customMessage ...string) {
 
 type Error struct {
 	Code  int
-	Error interface{}
+	Error any
 }
 
 func (e Error) String() string {
@@ -63,7 +63,7 @@ func (e Error) String() string {
 	return ""
 }
 
-func Abort(code int, err interface{}) {
+func Abort(code int, err any) {
 	if e, ok := err.(error); ok {
 		r := regexp.MustCompile(`^(?:[^=]+=){2}([^-]+)`)
 		newErr := r.FindAllStringSubmatch(e.Error(), -1) //will return nil when passed from a UC

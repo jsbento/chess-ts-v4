@@ -31,7 +31,7 @@ export const indexToRankFile = (index: number): [number, number] => {
   return [rank, file]
 }
 
-export const indexToSquare = (index: string | number): string => {
+export const indexToSquare = (index: number): string => {
   const rank = 8 - Math.floor(Number(index) / 8)
   const file = 'abcdefgh'[Number(index) % 8]
 
@@ -39,8 +39,8 @@ export const indexToSquare = (index: string | number): string => {
 }
 
 export const buildMove = (
-  from: string | number,
-  to: string | number,
+  from: number,
+  to: number,
 ): { from: string; to: string } => {
   return {
     from: indexToSquare(from),

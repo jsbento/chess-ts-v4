@@ -16,13 +16,10 @@ func (s *UsersService) CreateUser() http.HandlerFunc {
 		user, err := s.store.CreateUser(&req)
 		api.CheckError(http.StatusInternalServerError, err)
 
-		accessToken, err := s.jwt.GenerateAccessToken(user)
+		user.AccessToken, err = s.jwt.GenerateAccessToken(user)
 		api.CheckError(http.StatusInternalServerError, err)
-		refreshToken, err := s.jwt.GenerateRefreshToken(user)
+		user.RefreshToken, err = s.jwt.GenerateRefreshToken(user)
 		api.CheckError(http.StatusInternalServerError, err)
-		user.AccessToken = accessToken
-		user.RefreshToken = refreshToken
-
 		api.WriteJSON(w, http.StatusCreated, user)
 	}
 }

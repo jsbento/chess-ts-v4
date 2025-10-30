@@ -23,7 +23,7 @@ const GameStatusModal: React.FC<GameStatusModalProps> = ({ resetBoard }) => {
       <div className='text-center'>
         <h2 className='text-2xl font-bold'>Game Over!</h2>
         <p className='text-lg'>{message}</p>
-        <button className='mt-10 bg-gray-700' onClick={close}>
+        <button className='mt-10 bg-[#242424] text-white' onClick={close}>
           Reset
         </button>
       </div>

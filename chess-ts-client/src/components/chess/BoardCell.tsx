@@ -1,4 +1,5 @@
 import React from 'react'
+import type { MouseEvent } from 'react'
 import { useDroppable } from '@dnd-kit/core'
 
 import { indexToSquare } from '@utils'
@@ -7,6 +8,7 @@ interface BoardCellProps {
   id: string
   color: string
   size: number
+  onClick: (e: MouseEvent<HTMLElement>) => void
   highlight?: boolean
   children?: React.ReactNode
 }
@@ -15,6 +17,7 @@ const BoardCell: React.FC<BoardCellProps> = ({
   id,
   color,
   size,
+  onClick,
   highlight,
   children,
 }) => {
@@ -32,6 +35,7 @@ const BoardCell: React.FC<BoardCellProps> = ({
       ref={setNodeRef}
       style={style}
       className={`${highlight ? 'bg-teal-200 border-2 border-teal-400' : color} w-full flex justify-center items-center relative bg-blend-screen`}
+      onClick={onClick}
     >
       <p
         style={{ position: 'absolute', top: 0, left: 1, fontSize: '0.5em' }}

@@ -1,8 +1,8 @@
 package bitboards
 
 import (
-	c "github.com/jsbento/chess-server/pkg/constants"
-	"github.com/jsbento/chess-server/pkg/utils"
+	c "github.com/jsbento/chess-server-v4/internal/engine/constants"
+	"github.com/jsbento/chess-server-v4/internal/engine/utils"
 )
 
 func PopBit(bb *uint64) int {

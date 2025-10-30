@@ -1,6 +1,4 @@
 @import 'tailwindcss';
-@import 'tailwindcss/preflight';
-@import 'tailwindcss/utilities';
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -87,5 +85,6 @@ input::-webkit-inner-spin-button {
 }
 
 input[type='number'] {
+  appearance: textfield;
   -moz-appearance: textfield;
 }

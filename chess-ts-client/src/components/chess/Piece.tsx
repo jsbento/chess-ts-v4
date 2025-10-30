@@ -1,4 +1,4 @@
-import React, { type MouseEvent } from 'react'
+import React from 'react'
 import { useDraggable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
 
@@ -8,7 +8,7 @@ interface PieceProps {
   id: string
   piece: string
   color: 'black' | 'white'
-  onClick?: (e: MouseEvent<HTMLElement>) => void
+  onClick?: () => void
 }
 
 const Piece: React.FC<PieceProps> = ({ id, piece, color, onClick }) => {

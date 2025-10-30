@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-  useRef,
-  type MouseEvent,
-} from 'react'
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import {
   DndContext,
   type DragEndEvent,
@@ -26,10 +19,12 @@ import {
   parseEngineMove,
 } from '@utils'
 
-import BoardCell from './BoardCell'
-import Piece from './Piece'
-import PromotionSquare from './PromotionSquare'
-import GameStatusModal from './GameStatusModal'
+import {
+  BoardCell,
+  Piece,
+  PromotionSquare,
+  GameStatusModal,
+} from '@components/chess'
 
 import { useDimensions, useAppDispatch, useAppSelector } from '@hooks'
 import { evaluatePosition, searchPosition } from '@behavior'
@@ -108,6 +103,12 @@ const Board: React.FC<BoardProps> = ({ fen, size }) => {
     }
   }, [fen])
 
+  useEffect(() => {
+    return () => {
+      resetBoard()
+    }
+  }, [])
+
   const updateScore = useCallback(async () => {
     const newScore = await evaluatePosition({ fen: currentFen })
     if (newScore === null) {
@@ -165,13 +166,10 @@ const Board: React.FC<BoardProps> = ({ fen, size }) => {
       return
     }
 
-    onMove(buildMove(active.id, over.id))
+    onMove(buildMove(Number(active.id), Number(over.id)))
   }
 
-  const onClickPiece = (id: number) => (e: MouseEvent<HTMLElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
-
+  const onClickPiece = (id: number) => () => {
     if (selectedPiece?.id === id) {
       setSelectedPiece(null)
       return
@@ -193,6 +191,9 @@ const Board: React.FC<BoardProps> = ({ fen, size }) => {
     setCurrentFen(chess.fen())
     updateCharBoard()
     dispatch(clearMoves())
+    setScore(null)
+    setPromotion(undefined)
+    setSelectedPiece(null)
   }
 
   const renderPieceCell = (cell: string, idx: number) => {
@@ -226,8 +227,15 @@ const Board: React.FC<BoardProps> = ({ fen, size }) => {
 
     charBoard.forEach((cell, idx) => {
       const [rank, file] = indexToRankFile(idx)
-      const highlighted =
+      const targeted =
         (selectedPiece && selectedPiece.moves.includes(idx)) || false
+
+      const onClickCell = () => {
+        const move = selectedPiece?.moves.find((move) => move === idx)
+        if (selectedPiece && move !== undefined) {
+          onMove(buildMove(selectedPiece.id, move))
+        }
+      }
 
       cells.push(
         <BoardCell
@@ -235,7 +243,8 @@ const Board: React.FC<BoardProps> = ({ fen, size }) => {
           id={idx.toString()}
           size={cellSize}
           color={(rank + file) % 2 === 0 ? 'bg-white' : 'bg-gray-600'}
-          highlight={highlighted}
+          highlight={targeted}
+          onClick={onClickCell}
         >
           {renderPieceCell(cell, idx)}
         </BoardCell>,

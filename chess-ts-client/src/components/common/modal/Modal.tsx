@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, KeyboardEvent } from 'react'
+import React, { useEffect, useRef } from 'react'
+import type { KeyboardEvent } from 'react'
 import './Modal.css'
 
 interface ModalProps {

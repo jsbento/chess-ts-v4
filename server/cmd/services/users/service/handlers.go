@@ -1,15 +1,17 @@
 package service
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 	t "github.com/jsbento/chess-server-v4/cmd/services/users/types"
+	"golang.org/x/crypto/bcrypt"
 
 	"github.com/jsbento/chess-server-v4/pkg/api"
 )
 
-func (s *UsersService) CreateUser() http.HandlerFunc {
+func (s *UsersService) SignUp() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req t.CreateUser
 		api.ParseAndValidate(r, &req)
@@ -21,6 +23,23 @@ func (s *UsersService) CreateUser() http.HandlerFunc {
 		user.RefreshToken, err = s.jwt.GenerateRefreshToken(user)
 		api.CheckError(http.StatusInternalServerError, err)
 		api.WriteJSON(w, http.StatusCreated, user)
+	}
+}
+
+func (s *UsersService) SignIn() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var req t.SignInReq
+		api.ParseAndValidate(r, &req)
+		user, err := s.store.GetUserByIdentifier(req.Identifier)
+		api.CheckError(http.StatusInternalServerError, err)
+		if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
+			api.CheckError(http.StatusUnauthorized, errors.New("unauthorized"))
+		}
+		user.AccessToken, err = s.jwt.GenerateAccessToken(user)
+		api.CheckError(http.StatusInternalServerError, err)
+		user.RefreshToken, err = s.jwt.GenerateRefreshToken(user)
+		api.CheckError(http.StatusInternalServerError, err)
+		api.WriteJSON(w, http.StatusOK, user)
 	}
 }
 

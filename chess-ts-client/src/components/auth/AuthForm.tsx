@@ -87,8 +87,10 @@ const AuthForm: React.FC = () => {
         validationSchema={isSignIn ? SignInSchema : SignUpSchema}
         onSubmit={onSubmit}
       >
-        {({ isSubmitting }) => (
-          <div className={isSubmitting ? 'animate-pulse' : undefined}>
+        {({ isSubmitting, resetForm }) => (
+          <div
+            className={`${isSubmitting ? 'animate-pulse' : ''} h-full flex flex-col`}
+          >
             <h2 className='font-semibold text-center mb-5 text-xl'>
               {isSignIn ? 'Sign In' : 'Sign Up'}
             </h2>
@@ -119,17 +121,21 @@ const AuthForm: React.FC = () => {
                   <FormError message={error} />
                 </div>
               )}
-              <p className='mt-5'>
-                {isSignIn ? 'Need an account?' : 'Already have an account?'}
-                <button
-                  type='button'
-                  onClick={onChangeSignIn}
-                  className='text-blue-500 bg-inherit w-auto hover:border-[#242424] p-0 ml-1'
-                >
-                  {isSignIn ? 'Sign Up' : 'Sign In'}
-                </button>
-              </p>
             </Form>
+            <div className='flex items-center mt-auto justify-center'>
+              <p>
+                {isSignIn ? 'Need an account?' : 'Already have an account?'}
+              </p>
+              <a
+                onClick={() => {
+                  onChangeSignIn()
+                  resetForm({ values: isSignIn ? signUpValues : signInValues })
+                }}
+                className='text-blue-500 w-auto hover:border-[#242424] p-0 ml-1 cursor-pointer'
+              >
+                {isSignIn ? 'Sign Up' : 'Sign In'}
+              </a>
+            </div>
           </div>
         )}
       </Formik>
@@ -146,7 +152,12 @@ interface FormInputProps {
 const FormInput: React.FC<FormInputProps> = ({ name, label, type }) => (
   <div className='flex flex-col mb-5'>
     <label htmlFor={name}>{label}</label>
-    <Field type={type} name={name} id={name} className='rounded-lg p-1' />
+    <Field
+      type={type}
+      name={name}
+      id={name}
+      className='rounded-lg p-1 border-2 border-[#333]'
+    />
     <ErrorMessage name={name} render={(msg) => <FormError message={msg} />} />
   </div>
 )

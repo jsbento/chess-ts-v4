@@ -10,7 +10,7 @@ type User struct {
 	Id        string    `json:"id"        gorm:"primaryKey;index"`
 	Username  string    `json:"username"  gorm:"not null"`
 	Email     string    `json:"email"     gorm:"not null;unique"`
-	Password  string    `json:"password"  gorm:"not null"`
+	Password  string    `json:"-"         gorm:"not null"`
 	CreatedAt time.Time `json:"createdAt" gorm:"autoCreateTime"`
 	UpdatedAt time.Time `json:"updatedAt" gorm:"autoUpdateTime"`
 
@@ -72,6 +72,21 @@ func (u *UpdateUser) Validate() error {
 		} else if !regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`).MatchString(*u.Email) {
 			return errors.New("invalid email address")
 		}
+	}
+	return nil
+}
+
+type SignInReq struct {
+	Identifier string `json:"identifier"`
+	Password   string `json:"password"`
+}
+
+func (u *SignInReq) Validate() error {
+	if u.Identifier == "" {
+		return errors.New("identifier is required")
+	}
+	if u.Password == "" {
+		return errors.New("password is required")
 	}
 	return nil
 }

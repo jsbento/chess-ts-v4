@@ -56,7 +56,8 @@ func (s *UsersService) Close() error {
 
 func (s *UsersService) BindRoutes(router *chi.Mux) {
 	router.Route("/users", func(r chi.Router) {
-		r.Post("/signup", s.CreateUser())
+		r.Post("/signup", s.SignUp())
+		r.Post("/signin", s.SignIn())
 		r.Put("/{id}", s.jwt.Authed(s.UpdateUser()))
 		r.Get("/{id}", s.jwt.Authed(s.GetUser()))
 	})

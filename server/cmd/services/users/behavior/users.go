@@ -52,6 +52,14 @@ func (s *Store) GetUser(id string) (*t.User, error) {
 	return user, nil
 }
 
+func (s *Store) GetUserByIdentifier(identifier string) (*t.User, error) {
+	user := &t.User{}
+	if err := s.pg.GetDB().Model(&t.User{}).Where("email = ? OR username = ?", identifier, identifier).First(user).Error; err != nil {
+		return nil, err
+	}
+	return user, nil
+}
+
 func hashPassword(password string) string {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {

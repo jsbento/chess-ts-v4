@@ -1,8 +1,8 @@
 import type { User } from '@types'
 
-export type AuthResp = {
-  user?: User
-  token?: string
+export type AuthResp = User & {
+  accessToken: string
+  refreshToken: string
 }
 
 export type SignInReq = {

@@ -15,14 +15,14 @@ export const signIn = async (
   try {
     const resp = await post<SignInReq, AuthResp>('/users/signin', data)
 
-    if (!resp || !resp.user || !resp.token) {
+    if (!resp) {
       return null
     }
 
-    window.localStorage.setItem('token', resp.token)
+    window.localStorage.setItem('token', resp.accessToken)
 
-    dispatch(login(resp.user))
-    return resp.user
+    dispatch(login(resp))
+    return resp
   } catch (err) {
     console.log(err)
     return null
@@ -36,14 +36,14 @@ export const signUp = async (
   try {
     const resp = await post<SignUpReq, AuthResp>('/users/signup', data)
 
-    if (!resp || !resp.user || !resp.token) {
+    if (!resp) {
       return null
     }
 
-    window.localStorage.setItem('token', resp.token)
+    window.localStorage.setItem('token', resp.accessToken)
 
-    dispatch(login(resp.user))
-    return resp.user
+    dispatch(login(resp))
+    return resp
   } catch (err) {
     console.log(err)
     return null

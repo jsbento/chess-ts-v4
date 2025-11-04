@@ -13,3 +13,5 @@ export type {
 export type { User } from './user'
 
 export type { AuthResp, SignInReq, SignUpReq } from './auth'
+
+export type { Game, SaveGameReq } from './games'

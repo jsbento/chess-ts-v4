@@ -10,6 +10,8 @@ import (
 
 	cS "github.com/jsbento/chess-server-v4/cmd/services/chess/service"
 	cT "github.com/jsbento/chess-server-v4/cmd/services/chess/types"
+	gS "github.com/jsbento/chess-server-v4/cmd/services/games/service"
+	gT "github.com/jsbento/chess-server-v4/cmd/services/games/types"
 	uS "github.com/jsbento/chess-server-v4/cmd/services/users/service"
 	uT "github.com/jsbento/chess-server-v4/cmd/services/users/types"
 
@@ -59,6 +61,16 @@ func main() {
 	}
 	defer chessService.Close()
 
+	gamesService, err := gS.NewGamesService(&gT.Config{
+		PostgresDSN:   pgDSN,
+		JWTKeyPath:    jKeyPath,
+		JWTSecretPath: jSecretPath,
+	})
+	if err != nil {
+		log.Fatalf("Failed to create games service: %v", err)
+	}
+	defer gamesService.Close()
+
 	eInit.AllInit()
 
 	cfg := &api.ServerConfig{
@@ -75,6 +87,7 @@ func main() {
 	})
 	chessService.BindRoutes(server.Router)
 	usersService.BindRoutes(server.Router)
+	gamesService.BindRoutes(server.Router)
 
 	log.Printf("Server starting on port %d", serverPort)
 	if err := server.Start(); err != nil {

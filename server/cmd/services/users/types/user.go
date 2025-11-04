@@ -4,6 +4,8 @@ import (
 	"errors"
 	"regexp"
 	"time"
+
+	gT "github.com/jsbento/chess-server-v4/cmd/services/games/types"
 )
 
 type User struct {
@@ -16,6 +18,8 @@ type User struct {
 
 	AccessToken  string `json:"accessToken"  gorm:"-"`
 	RefreshToken string `json:"refreshToken" gorm:"-"`
+
+	Games []*gT.Game `json:"games" gorm:"foreignKey:PlayerId;references:Id"`
 }
 
 func (u *User) GetId() string {

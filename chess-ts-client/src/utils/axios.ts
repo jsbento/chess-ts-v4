@@ -36,7 +36,7 @@ export const post = async <Req, Res>(
 
 export const get = async <Req, Res>(
   uri: string,
-  params: Req,
+  params: Req | undefined = undefined,
 ): Promise<Res | null> => {
   try {
     const response = await _axios.get<Res>(uri, { params })

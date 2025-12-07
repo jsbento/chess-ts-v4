@@ -1,10 +1,15 @@
 package engine
 
 import (
+	"sync"
+
 	c "github.com/jsbento/chess-server-v4/internal/engine/constants"
+	eInit "github.com/jsbento/chess-server-v4/internal/engine/init"
 	t "github.com/jsbento/chess-server-v4/internal/engine/types"
 	"github.com/jsbento/chess-server-v4/internal/engine/utils"
 )
+
+var runOnce sync.Once
 
 type Engine struct {
 	Board      *t.Board
@@ -17,6 +22,10 @@ type Engine struct {
 }
 
 func NewEngine() (e *Engine) {
+	runOnce.Do(func() {
+		eInit.AllInit()
+	})
+
 	e = &Engine{
 		Board:      t.NewBoard(),
 		SetMask:    [64]uint64{},
@@ -32,12 +41,12 @@ func NewEngine() (e *Engine) {
 }
 
 func (e *Engine) InitBitmasks() {
-	for i := 0; i < 64; i++ {
+	for i := range 64 {
 		e.SetMask[i] = 0
 		e.ClearMask[i] = 0
 	}
 
-	for i := 0; i < 64; i++ {
+	for i := range 64 {
 		e.SetMask[i] |= (uint64(1) << uint64(i))
 		e.ClearMask[i] = ^e.SetMask[i]
 	}
@@ -71,7 +80,7 @@ func (e *Engine) ParseMove(m string) int {
 	list := t.NewMoveList()
 	e.GenerateAllMoves(list)
 
-	for i := 0; i < list.Count; i++ {
+	for i := range list.Count {
 		move := list.Moves[i].Move
 		if utils.FromSq(move) == from && utils.ToSq(move) == to {
 			promPce := int(utils.Promoted(move))

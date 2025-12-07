@@ -6,13 +6,13 @@ import (
 )
 
 func (e *Engine) InitHashKeys() {
-	for i := 0; i < 13; i++ {
+	for i := range 13 {
 		for j := 0; j < 120; j++ {
 			e.PieceKeys[i][j] = utils.Rand64()
 		}
 	}
 	e.SideKey = utils.Rand64()
-	for i := 0; i < 16; i++ {
+	for i := range 16 {
 		e.CastleKeys[i] = utils.Rand64()
 	}
 }
@@ -20,7 +20,7 @@ func (e *Engine) InitHashKeys() {
 func (e *Engine) GeneratePosKey() {
 	key := uint64(0)
 
-	for sq := 0; sq < c.BRD_SQ_NUM; sq++ {
+	for sq := range c.BRD_SQ_NUM {
 		piece := e.Board.Pieces[sq]
 		if int(piece) != int(c.NO_SQ) && int(piece) != int(c.EMPTY) &&
 			int(piece) != int(c.OFFBOARD) {

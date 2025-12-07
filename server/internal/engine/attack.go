@@ -32,14 +32,14 @@ func (e *Engine) IsSqAttacked(sq c.Square, side c.Side) bool {
 		}
 	}
 
-	for i := 0; i < 8; i++ {
+	for i := range 8 {
 		pce := e.Board.Pieces[sq+c.Square(c.KnDir[i])]
 		if pce != c.Piece(c.OFFBOARD) && IsKn(int(pce)) && d.PieceCol[int(pce)] == side {
 			return true
 		}
 	}
 
-	for i := 0; i < 4; i++ {
+	for i := range 4 {
 		dir := c.RkDir[i]
 		tSq := sq + c.Square(dir)
 		pce := e.Board.Pieces[tSq]
@@ -55,7 +55,7 @@ func (e *Engine) IsSqAttacked(sq c.Square, side c.Side) bool {
 		}
 	}
 
-	for i := 0; i < 4; i++ {
+	for i := range 4 {
 		dir := c.BiDir[i]
 		tSq := sq + c.Square(dir)
 		pce := e.Board.Pieces[tSq]
@@ -71,7 +71,7 @@ func (e *Engine) IsSqAttacked(sq c.Square, side c.Side) bool {
 		}
 	}
 
-	for i := 0; i < 8; i++ {
+	for i := range 8 {
 		pce := e.Board.Pieces[sq+c.Square(c.KiDir[i])]
 		if pce != c.Piece(c.OFFBOARD) && IsKi(int(pce)) && d.PieceCol[int(pce)] == side {
 			return true

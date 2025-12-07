@@ -10,26 +10,26 @@ import (
 )
 
 func (e *Engine) ResetBoard() {
-	for i := 0; i < c.BRD_SQ_NUM; i++ {
+	for i := range c.BRD_SQ_NUM {
 		e.Board.Pieces[i] = c.Piece(c.OFFBOARD)
 	}
 
-	for i := 0; i < 64; i++ {
+	for i := range 64 {
 		e.Board.Pieces[c.Sq64ToSq120[i]] = c.Piece(c.EMPTY)
 	}
 
-	for i := 0; i < 2; i++ {
+	for i := range 2 {
 		e.Board.BigPce[i] = 0
 		e.Board.MajPce[i] = 0
 		e.Board.MinPce[i] = 0
 		e.Board.Material[i] = 0
 	}
 
-	for i := 0; i < 3; i++ {
+	for i := range 3 {
 		e.Board.Pawns[i] = uint64(0)
 	}
 
-	for i := 0; i < 13; i++ {
+	for i := range 13 {
 		e.Board.PceNum[i] = 0
 	}
 
@@ -199,7 +199,7 @@ func (e *Engine) ParseFEN(fen string) error {
 }
 
 func (e *Engine) UpdateListsMaterial() {
-	for i := 0; i < c.BRD_SQ_NUM; i++ {
+	for i := range c.BRD_SQ_NUM {
 		pce := e.Board.Pieces[i]
 		if pce != c.Piece(c.OFFBOARD) && pce != c.Piece(c.EMPTY) {
 			color := d.PieceCol[pce]
@@ -218,19 +218,17 @@ func (e *Engine) UpdateListsMaterial() {
 			e.Board.Plist[pce][e.Board.PceNum[pce]] = c.Square(i)
 			e.Board.PceNum[pce]++
 
-			if pce == c.WK {
-				e.Board.KingSq[c.WHITE] = i
-			}
-			if pce == c.BK {
-				e.Board.KingSq[c.BLACK] = i
-			}
-
-			if pce == c.WP {
+			switch pce {
+			case c.WP:
 				e.SetBit(&e.Board.Pawns[c.WHITE], utils.Sq64(c.Square(i)))
 				e.SetBit(&e.Board.Pawns[c.BOTH], utils.Sq64(c.Square(i)))
-			} else if pce == c.BP {
+			case c.BP:
 				e.SetBit(&e.Board.Pawns[c.BLACK], utils.Sq64(c.Square(i)))
 				e.SetBit(&e.Board.Pawns[c.BOTH], utils.Sq64(c.Square(i)))
+			case c.WK:
+				e.Board.KingSq[c.WHITE] = i
+			case c.BK:
+				e.Board.KingSq[c.BLACK] = i
 			}
 		}
 	}

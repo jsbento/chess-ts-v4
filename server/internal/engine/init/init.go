@@ -14,11 +14,11 @@ func AllInit() {
 }
 
 func InitSq120To64() {
-	for i := 0; i < c.BRD_SQ_NUM; i++ {
+	for i := range c.BRD_SQ_NUM {
 		c.Sq120ToSq64[i] = 65
 	}
 
-	for i := 0; i < 64; i++ {
+	for i := range 64 {
 		c.Sq64ToSq120[i] = 120
 	}
 
@@ -34,7 +34,7 @@ func InitSq120To64() {
 }
 
 func InitFilesRanksBrd() {
-	for i := 0; i < c.BRD_SQ_NUM; i++ {
+	for i := range c.BRD_SQ_NUM {
 		c.FilesBrd[i] = int(c.OFFBOARD)
 		c.RanksBrd[i] = int(c.OFFBOARD)
 	}
@@ -57,7 +57,7 @@ func InitMvvLva() {
 }
 
 func InitEvalMasks() {
-	for i := 0; i < 8; i++ {
+	for i := range 8 {
 		c.FileBBMask[i] = uint64(0)
 		c.RankBBMask[i] = uint64(0)
 	}
@@ -70,13 +70,13 @@ func InitEvalMasks() {
 		}
 	}
 
-	for sq := 0; sq < 64; sq++ {
+	for sq := range 64 {
 		c.IsolatedMask[sq] = uint64(0)
 		c.WhitePassedMask[sq] = uint64(0)
 		c.BlackPassedMask[sq] = uint64(0)
 	}
 
-	for sq := 0; sq < 64; sq++ {
+	for sq := range 64 {
 		tSq := sq + 8
 
 		for tSq < 64 {

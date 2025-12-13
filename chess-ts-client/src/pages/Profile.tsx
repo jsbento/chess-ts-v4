@@ -5,7 +5,7 @@ import { getUserGames } from '@behavior'
 import type { Game } from '@types'
 
 const Profile: React.FC = () => {
-  const user = useAppSelector((state) => state.auth.user)
+  const { user } = useAppSelector((state) => state.auth)
   const [games, setGames] = useState<Game[]>([])
   if (!user) {
     return null

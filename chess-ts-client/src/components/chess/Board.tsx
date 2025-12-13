@@ -147,16 +147,20 @@ const Board: React.FC<BoardProps> = ({ fen, size }) => {
     }
 
   const makeMove = (from: string, to: string, promotion?: PromotionPiece) => {
-    const move = chess.move({
-      from,
-      to,
-      promotion,
-    })
+    try {
+      const move = chess.move({
+        from,
+        to,
+        promotion,
+      })
 
-    if (move) {
-      updateCharBoard()
-      dispatch(addMove(move.san))
-      setCurrentFen(chess.fen())
+      if (move) {
+        updateCharBoard()
+        dispatch(addMove(move.san))
+        setCurrentFen(chess.fen())
+      }
+    } catch (err) {
+      console.log(`Invalid move: ${from} to ${to} ${promotion}`)
     }
   }
 

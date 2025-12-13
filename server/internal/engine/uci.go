@@ -13,7 +13,7 @@ import (
 	"github.com/jsbento/chess-server-v4/pkg/utils"
 )
 
-func (e *Engine) ParseGo(line string, info *t.SearchInfo) string {
+func (e *Engine) ParseGo(line string, info *t.SearchInfo) (string, string) {
 	depth, movesToGo, moveTime := -1, 30, -1
 	time, inc := -1, 0
 
@@ -173,7 +173,8 @@ func (e *Engine) ParseUCICommand(command string, info *t.SearchInfo) (string, er
 		}
 		return "New game started", nil
 	} else if strings.Contains(line, "go") {
-		return e.ParseGo(line, info), nil
+		res, _ := e.ParseGo(line, info)
+		return res, nil
 	} else if line == "quit" {
 		info.Quit = true
 		return "Game Stopped", nil

@@ -13,12 +13,9 @@ interface GameStatusModalProps {
 
 const GameStatusModal: React.FC<GameStatusModalProps> = ({ resetBoard }) => {
   const dispatch = useAppDispatch()
-  const { isOpen, message, user, movesList } = useAppSelector((state) => ({
-    isOpen: state.gameStatusModal.isOpen,
-    message: state.gameStatusModal.message,
-    user: state.auth.user,
-    movesList: state.chessMoves.moves,
-  }))
+  const { isOpen, message } = useAppSelector((state) => state.gameStatusModal)
+  const { user } = useAppSelector((state) => state.auth)
+  const { moves: movesList } = useAppSelector((state) => state.chessMoves)
 
   const close = () => {
     resetBoard()

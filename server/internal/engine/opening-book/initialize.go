@@ -29,12 +29,13 @@ type fileEntries struct {
 
 func NewOpeningBook(engine *e.Engine) (*OpeningBook, error) {
 	// parallel load all tsv files
+	// non-docker data dir: ../../internal/engine/opening-book/data/
 	tsvFiles := []string{
-		"../../internal/engine/opening-book/data/a.tsv",
-		"../../internal/engine/opening-book/data/b.tsv",
-		"../../internal/engine/opening-book/data/c.tsv",
-		"../../internal/engine/opening-book/data/d.tsv",
-		"../../internal/engine/opening-book/data/e.tsv",
+		"./internal/engine/opening-book/data/a.tsv",
+		"./internal/engine/opening-book/data/b.tsv",
+		"./internal/engine/opening-book/data/c.tsv",
+		"./internal/engine/opening-book/data/d.tsv",
+		"./internal/engine/opening-book/data/e.tsv",
 	}
 
 	entriesChan := make(chan fileEntries, len(tsvFiles))

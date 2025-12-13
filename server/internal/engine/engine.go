@@ -19,6 +19,8 @@ type Engine struct {
 	SideKey    uint64
 	EnPasKey   uint64
 	CastleKeys [16]uint64
+
+	OpeningBook IOpeningBook
 }
 
 func NewEngine() (e *Engine) {
@@ -27,17 +29,22 @@ func NewEngine() (e *Engine) {
 	})
 
 	e = &Engine{
-		Board:      t.NewBoard(),
-		SetMask:    [64]uint64{},
-		ClearMask:  [64]uint64{},
-		PieceKeys:  [13][120]uint64{},
-		SideKey:    0,
-		EnPasKey:   0,
-		CastleKeys: [16]uint64{},
+		Board:       t.NewBoard(),
+		SetMask:     [64]uint64{},
+		ClearMask:   [64]uint64{},
+		PieceKeys:   [13][120]uint64{},
+		SideKey:     0,
+		EnPasKey:    0,
+		CastleKeys:  [16]uint64{},
+		OpeningBook: nil,
 	}
 	e.InitBitmasks()
 	e.InitHashKeys()
 	return e
+}
+
+func (e *Engine) WithOpeningBook(book IOpeningBook) {
+	e.OpeningBook = book
 }
 
 func (e *Engine) InitBitmasks() {
@@ -101,4 +108,10 @@ func (e *Engine) ParseMove(m string) int {
 	}
 
 	return c.NOMOVE
+}
+
+type IOpeningBook interface {
+	GetMoves(positionKey uint64) []string
+	GetOpeningName(positionKey uint64) []string
+	InBook(positionKey uint64) bool
 }

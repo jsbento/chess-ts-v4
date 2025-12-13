@@ -16,3 +16,7 @@ func Rand64() uint64 {
 		r.Int(),
 	) | (uint64(r.Int()) << 15) | (uint64(r.Int()) << 30) | (uint64(r.Int()) << 45) | ((uint64(r.Int()) & 0xf) << 60)
 }
+
+func RandRange(min, max int) int {
+	return rand.Intn(max-min+1) + min
+}

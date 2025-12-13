@@ -17,7 +17,8 @@ type SearchPosReq struct {
 }
 
 type MoveResp struct {
-	Move string `json:"move"`
+	Move        string  `json:"move"`
+	OpeningName *string `json:"openingName"`
 }
 
 func (r *SearchPosReq) ToGoCmd() string {

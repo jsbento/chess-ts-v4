@@ -9,7 +9,7 @@ import './Root.css'
 const Root: React.FC = () => {
   const dispatch = useAppDispatch()
 
-  const user = useAppSelector((state) => state.auth.user)
+  const { user } = useAppSelector((state) => state.auth)
 
   useEffect(() => {
     const healthz = async () => {

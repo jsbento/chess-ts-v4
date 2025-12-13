@@ -243,10 +243,22 @@ func (e *Engine) AlphaBeta(alpha, beta, depth int, info *t.SearchInfo, doNull bo
 	return alpha
 }
 
-func (e *Engine) SearchPosition(info *t.SearchInfo) string {
+func (e *Engine) SearchPosition(info *t.SearchInfo) (string, string) {
 	bestMove := c.NOMOVE
-	e.ClearForSearch(info)
 
+	if e.OpeningBook != nil {
+		if e.OpeningBook.InBook(e.Board.PosKey) {
+			moves := e.OpeningBook.GetMoves(e.Board.PosKey)
+			if len(moves) > 0 {
+				mv := moves[utils.RandRange(0, len(moves)-1)]
+				if e.ParseMove(mv) != c.NOMOVE {
+					return mv, e.OpeningBook.GetOpeningName(e.Board.PosKey)[0]
+				}
+			}
+		}
+	}
+
+	e.ClearForSearch(info)
 	for currDepth := 1; currDepth <= info.Depth; currDepth++ {
 		e.AlphaBeta(-c.INFINITE, c.INFINITE, currDepth, info, true)
 
@@ -258,5 +270,5 @@ func (e *Engine) SearchPosition(info *t.SearchInfo) string {
 		bestMove = e.Board.PvArray[0]
 	}
 
-	return eUtils.PrintMove(bestMove)
+	return eUtils.PrintMove(bestMove), ""
 }

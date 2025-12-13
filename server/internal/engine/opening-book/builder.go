@@ -5,6 +5,7 @@ import (
 
 	e "github.com/jsbento/chess-server-v4/internal/engine"
 	c "github.com/jsbento/chess-server-v4/internal/engine/constants"
+	d "github.com/jsbento/chess-server-v4/internal/engine/data"
 	t "github.com/jsbento/chess-server-v4/internal/engine/types"
 	"github.com/jsbento/chess-server-v4/internal/engine/utils"
 )
@@ -109,7 +110,7 @@ func matchesSAN(san string, move int, engine *e.Engine) bool {
 	// Check piece type (first character if uppercase)
 	if len(san) > 0 {
 		firstChar := string(san[0])
-		pieceChar := getPieceChar(piece, engine.Board.Side)
+		pieceChar := getPieceChar(piece)
 
 		// If first char is uppercase letter (excluding file letters), it should match piece type
 		firstCharUpper := strings.ToUpper(firstChar)
@@ -167,23 +168,9 @@ func isSquareChar(c byte) bool {
 }
 
 // getPieceChar returns the character representation of a piece
-func getPieceChar(piece c.Piece, side c.Side) string {
-	switch piece {
-	case c.WP, c.BP:
-		return "P"
-	case c.WN, c.BN:
-		return "N"
-	case c.WB, c.BB:
-		return "B"
-	case c.WR, c.BR:
-		return "R"
-	case c.WQ, c.BQ:
-		return "Q"
-	case c.WK, c.BK:
-		return "K"
-	default:
-		return "P"
-	}
+func getPieceChar(piece c.Piece) string {
+	return string(d.PceChar[piece])
+
 }
 
 // BuildOpeningBookFromTSV builds an opening book graph from TSV entries
@@ -194,7 +181,6 @@ func BuildOpeningBookFromTSV(entries []TSVEntry, engine *e.Engine) (*OpeningBook
 	if err := engine.ParseFEN(c.START_FEN); err != nil {
 		return nil, err
 	}
-	engine.GeneratePosKey()
 	book.RootKey = engine.Board.PosKey
 
 	// Process each entry
@@ -203,7 +189,6 @@ func BuildOpeningBookFromTSV(entries []TSVEntry, engine *e.Engine) (*OpeningBook
 		if err := engine.ParseFEN(c.START_FEN); err != nil {
 			continue // Skip invalid entries
 		}
-		engine.GeneratePosKey()
 
 		// Traverse moves in this entry
 		for moveIdx, movePair := range entry.Moves {
@@ -226,7 +211,7 @@ func BuildOpeningBookFromTSV(entries []TSVEntry, engine *e.Engine) (*OpeningBook
 
 				// Add edge with move in UCI format
 				moveUCI := utils.PrintMove(whiteMove)
-				book.addEdge(fromPosKey, toPosKey, moveUCI, entry.ECO, entry.Name)
+				book.addEdge(fromPosKey, toPosKey, moveUCI, entry.Name)
 
 				// If this is the last move and there's no black move, store metadata
 				if moveIdx == len(entry.Moves)-1 && movePair.BlackMove == "" {
@@ -253,7 +238,7 @@ func BuildOpeningBookFromTSV(entries []TSVEntry, engine *e.Engine) (*OpeningBook
 
 				// Add edge with move in UCI format
 				moveUCI := utils.PrintMove(blackMove)
-				book.addEdge(fromPosKey, toPosKey, moveUCI, entry.ECO, entry.Name)
+				book.addEdge(fromPosKey, toPosKey, moveUCI, entry.Name)
 
 				// If this is the last move, store metadata
 				if moveIdx == len(entry.Moves)-1 {
@@ -279,7 +264,7 @@ func (ob *OpeningBook) addNodeIfNotExists(posKey uint64) {
 }
 
 // addEdge adds or updates an edge between two nodes
-func (ob *OpeningBook) addEdge(fromPosKey, toPosKey uint64, moveUCI, eco, name string) {
+func (ob *OpeningBook) addEdge(fromPosKey, toPosKey uint64, moveUCI, name string) {
 	fromNode, exists := ob.Vertices[fromPosKey]
 	if !exists {
 		return

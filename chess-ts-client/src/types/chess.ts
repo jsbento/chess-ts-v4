@@ -26,4 +26,5 @@ export type SearchPositionReq = {
 
 export type SearchPositionResp = {
   move: string
+  openingName: string | null
 }

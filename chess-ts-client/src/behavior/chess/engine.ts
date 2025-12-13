@@ -27,6 +27,7 @@ export const searchPosition = async (
       '/chess/search',
       req,
     )
+    console.log(resp)
     return resp?.move ?? null
   } catch (err) {
     console.log(err)
